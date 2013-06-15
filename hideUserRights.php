@@ -34,25 +34,33 @@ class hideUserRights {
 	
 	function getOptionsSupported() {
 		return array(	gettext('All rights') => array('key' => 'all_rights', 'type' => OPTION_TYPE_CHECKBOX,
+										'order'=> 1,
 										'desc' => gettext('Rights. (the part with all the checkboxes)')),
 						gettext('Albums') => array('key' => 'albums', 'type' => OPTION_TYPE_CHECKBOX,
+										'order'=> 2,
 										'desc' => gettext('Managed albums')),
 						gettext('Pages') => array('key' => 'pages', 'type' => OPTION_TYPE_CHECKBOX,
+										'order'=> 3,
 										'desc' => gettext('Managed pages')),
 						gettext('Categories') => array('key' => 'categories', 'type' => OPTION_TYPE_CHECKBOX,
+										'order'=> 4,
 										'desc' => gettext('Managed news categories')),
 						/*
 						gettext('Albums, Pages and Categories') => array('key' => 'albums_pages_cats', 'type' => OPTION_TYPE_CHECKBOX,
 										'desc' => gettext('Albums, Pages and Categories')),
 						*/
-						gettext('All Noteboxes') => array('key' => 'notebox', 'type' => OPTION_TYPE_CHECKBOX,
-										'desc' => gettext('All Noteboxes')),
 						gettext('Languages (Flags)') => array('key' => 'languages', 'type' => OPTION_TYPE_CHECKBOX,
+										'order'=> 5,
 										'desc' => gettext('Languages (Flags)')),
 						gettext('Quota') => array('key' => 'quota', 'type' => OPTION_TYPE_CHECKBOX,
+										'order'=> 6,
 										'desc' => gettext('Assigned quota (if the <em>quota_manager</em> plugin is enabled)')),
 						gettext('Groups') => array('key' => 'groups', 'type' => OPTION_TYPE_CHECKBOX,
-										'desc' => gettext('User group membership information (if the <em>user_groups</em> plugin is enabled).'))
+										'order'=> 7,
+										'desc' => gettext('User group membership information (if the <em>user_groups</em> plugin is enabled).')),
+						gettext('All Noteboxes') => array('key' => 'notebox', 'type' => OPTION_TYPE_CHECKBOX,
+										'order'=> 8,
+										'desc' => gettext('All Noteboxes'))
 		);
 	}
 
@@ -76,7 +84,7 @@ class hideUserRights {
 						$user_config_add .= '$(".box-albums-unpadded:eq(1)").remove();';
 						
 					if (getOption("categories"))	// Managed news categories
-						$user_config_add .= '$(".box-albums-unpadded:eq(2)").remove();'; 
+						$user_config_add .= '$(".box-albums-unpadded:eq(1)").remove();'; 
 					
 					/*	
 					if (getOption("albums_pages_cats"))	// Albums, Pages, and Categories.
