@@ -76,9 +76,11 @@ class hideUserRights {
 				// <!-- <![CDATA[
 					$(document).ready(function(){';
 						
-					if (getOption("all_rights"))	// Rights. (the part with all the checkboxes).
+					if (getOption("all_rights")) {	// Rights. (the part with all the checkboxes).
 						$user_config_add .= '$(".box-rights").hide();';
-					
+						$user_config_add .= '$(".box-rights").parent("td").css({"vertical-align":"top","padding-top":"20px"});';
+						}
+						
 					if (getOption("albums"))		// Managed albums
 						$user_config_add .= '$(".box-albums-unpadded:eq(0)").hide();';
 						
