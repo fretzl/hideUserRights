@@ -67,7 +67,9 @@ class hideUserRights {
 	static function customDisplayRights() {
 		global $_zp_admin_tab;
 		$active_plugins = getEnabledPlugins();
+		
 		if (!zp_loggedin(ADMIN_RIGHTS) && $_zp_admin_tab == 'users') {
+				
 			$user_config_add = '';
 			$user_config = '
 			<script type="text/javascript">
@@ -75,16 +77,16 @@ class hideUserRights {
 					$(document).ready(function(){';
 						
 					if (getOption("all_rights"))	// Rights. (the part with all the checkboxes).
-						$user_config_add .= '$(".box-rights").remove();';
+						$user_config_add .= '$(".box-rights").hide();';
 					
 					if (getOption("albums"))		// Managed albums
-						$user_config_add .= '$(".box-albums-unpadded:eq(0)").remove();';
+						$user_config_add .= '$(".box-albums-unpadded:eq(0)").hide();';
 						
 					if (getOption("pages"))			// Managed pages
-						$user_config_add .= '$(".box-albums-unpadded:eq(1)").remove();';
+						$user_config_add .= '$(".box-albums-unpadded:eq(1)").hide();';
 						
 					if (getOption("categories"))	// Managed news categories
-						$user_config_add .= '$(".box-albums-unpadded:eq(2)").remove();'; 
+						$user_config_add .= '$(".box-albums-unpadded:eq(2)").hide();'; 
 					
 					/*	
 					if (getOption("albums_pages_cats"))	// Albums, Pages, and Categories.
@@ -92,16 +94,16 @@ class hideUserRights {
 					*/
 							
 					if (getOption("notebox"))		// All Noteboxes					
-						$user_config_add .= '$(".notebox").remove();';
+						$user_config_add .= '$(".notebox").hide();';
 						
 					if (getOption("languages"))		// Languages (Flags)									
-						$user_config_add .= '$("label[for=\'admin_language_0\'], ul.flags").remove();'; 	
+						$user_config_add .= '$("label[for=\'admin_language_0\'], ul.flags").hide();'; 	
 					
 					if (array_key_exists("quota_manager", $active_plugins))  // Assigned quota (if the "quota_manager" plugin is enabled).
-						$user_config_add .= '$("td:contains("'.gettext("Quota").'")").parent("tr.userextrainfo").remove();';
+						$user_config_add .= '$("td:contains("'.gettext("Quota").'")").parent("tr.userextrainfo").hide();';
 					
 					if (array_key_exists("user_groups", $active_plugins))  // "User group membership" information (if the "user_groups" plugin is enabled).
-						$user_config_add .= '$("tr.userextrainfo td:contains("'.gettext("User group membership").'")").next().andSelf().remove();';
+						$user_config_add .= '$("tr.userextrainfo td:contains("'.gettext("User group membership").'")").next().andSelf().hide();';
 						
 					
 				$user_config_add .= '
