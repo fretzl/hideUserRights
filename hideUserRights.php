@@ -84,7 +84,7 @@ class hideUserRights {
 						$user_config_add .= '$(".box-albums-unpadded:eq(1)").remove();';
 						
 					if (getOption("categories"))	// Managed news categories
-						$user_config_add .= '$(".box-albums-unpadded:eq(1)").remove();'; 
+						$user_config_add .= '$(".box-albums-unpadded:eq(2)").remove();'; 
 					
 					/*	
 					if (getOption("albums_pages_cats"))	// Albums, Pages, and Categories.
