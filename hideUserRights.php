@@ -15,9 +15,6 @@ $option_interface = 'hideUserRights';
 
 zp_register_filter('admin_head', 'hideUserRights::customDisplayRights');
 
-if (!defined('QUOTA')) define('QUOTA',getOption('quota'));
-if (!defined('GROUPS')) define('GROUPS',getOption('groups'));
-
 class hideUserRights {
 
 	function __construct() {
@@ -33,47 +30,75 @@ class hideUserRights {
 	}
 	
 	function getOptionsSupported() {
-		return array(	gettext('All rights') => array('key' => 'all_rights', 'type' => OPTION_TYPE_CHECKBOX,
+		
+		$options =  array(	gettext('All rights') => array(
+										'key' => 'all_rights', 
+										'type' => OPTION_TYPE_CHECKBOX,
 										'order'=> 1,
 										'desc' => gettext('Rights. (the part with all the checkboxes)')),
-						gettext('Albums') => array('key' => 'albums', 'type' => OPTION_TYPE_CHECKBOX,
+						gettext('Albums') => array(
+										'key' => 'albums', 
+										'type' => OPTION_TYPE_CHECKBOX,
 										'order'=> 2,
 										'desc' => gettext('Managed albums')),
-						gettext('Pages') => array('key' => 'pages', 'type' => OPTION_TYPE_CHECKBOX,
+						gettext('Pages') => array(
+										'key' => 'pages', 
+										'type' => OPTION_TYPE_CHECKBOX,
 										'order'=> 3,
 										'desc' => gettext('Managed pages')),
-						gettext('Categories') => array('key' => 'categories', 'type' => OPTION_TYPE_CHECKBOX,
+						gettext('Categories') => array(	
+										'key' => 'categories', 
+										'type' => OPTION_TYPE_CHECKBOX,
 										'order'=> 4,
 										'desc' => gettext('Managed news categories')),
 						/*
-						gettext('Albums, Pages and Categories') => array('key' => 'albums_pages_cats', 'type' => OPTION_TYPE_CHECKBOX,
+						gettext('Albums, Pages and Categories') => array(
+										'key' => 'albums_pages_cats', 
+										'type' => OPTION_TYPE_CHECKBOX,
 										'desc' => gettext('Albums, Pages and Categories')),
 						*/
-						gettext('Languages (Flags)') => array('key' => 'languages', 'type' => OPTION_TYPE_CHECKBOX,
+						gettext('Languages (Flags)') => array(
+										'key' => 'languages', 
+										'type' => OPTION_TYPE_CHECKBOX,
 										'order'=> 5,
 										'desc' => gettext('Languages (Flags)')),
-						gettext('Quota') => array('key' => 'quota', 'type' => OPTION_TYPE_CHECKBOX,
+						gettext('Quota') => array(
+										'key' => 'quota', 
+										'type' => OPTION_TYPE_CHECKBOX,
 										'order'=> 6,
-										'desc' => gettext('Assigned quota (if the <em>quota_manager</em> plugin is enabled)')),
-						gettext('Groups') => array('key' => 'groups', 'type' => OPTION_TYPE_CHECKBOX,
+										'desc' => gettext('Assigned quota (only if the <code>quota_manager</code> plugin is enabled)')),
+						gettext('Groups') => array(
+										'key' => 'groups', 
+										'type' => OPTION_TYPE_CHECKBOX,
 										'order'=> 7,
-										'desc' => gettext('User group membership information (if the <em>user_groups</em> plugin is enabled).')),
-						gettext('All Noteboxes') => array('key' => 'notebox', 'type' => OPTION_TYPE_CHECKBOX,
+										'desc' => gettext('User group membership information (only if the <code>user_groups</code> plugin is enabled).')),
+						gettext('All Noteboxes') => array(
+										'key' => 'notebox', 
+										'type' => OPTION_TYPE_CHECKBOX,
 										'order'=> 8,
 										'desc' => gettext('All Noteboxes'))
 		);
+		$active_plugins = getEnabledPlugins();
+		if (!array_key_exists("quota_manager", $active_plugins)) { 
+			$options[gettext('Quota')]['disabled'] = true;
+				if (!isset($_POST['quota'])) setOption('quota', 0); 
+			}
+		if (!array_key_exists("user_groups", $active_plugins)) { 
+			$options[gettext('Groups')]['disabled'] = true; 
+				if (!isset($_POST['groups'])) setOption('groups', 0);
+			}
+		
+		return $options;
 	}
 
 	static function customDisplayRights() {
 		global $_zp_admin_tab;
 		$active_plugins = getEnabledPlugins();
-		
 		if (!zp_loggedin(ADMIN_RIGHTS) && $_zp_admin_tab == 'users') {
-				
 			$user_config_add = '';
 			$user_config = '
 			<script type="text/javascript">
-				// <!-- <![CDATA[
+			// <!-- <![CDATA[
 					$(document).ready(function(){';
 						// start with aligning everything on top of the <td>
 						$user_config_add .= '$(".box-rights").parent("td").css({"vertical-align":"top","padding-top":"20px"});';
@@ -101,16 +126,16 @@ class hideUserRights {
 					if (getOption("languages"))		// Languages (Flags)									
 						$user_config_add .= '$("label[for=\'admin_language_0\'], ul.flags").hide();'; 	
 					
-					if (array_key_exists("quota_manager", $active_plugins))  // Assigned quota (if the "quota_manager" plugin is enabled).
-						$user_config_add .= '$("td:contains("'.gettext("Quota").'")").parent("tr.userextrainfo").hide();';
+					if (array_key_exists("quota_manager", $active_plugins) && getOption("quota"))  // Assigned quota (if the "quota_manager" plugin is enabled).
+						$user_config_add .= '$("td:contains(\"quota\")").parent("tr.userextrainfo").hide();';
 					
-					if (array_key_exists("user_groups", $active_plugins))  // "User group membership" information (if the "user_groups" plugin is enabled).
-						$user_config_add .= '$("tr.userextrainfo td:contains("'.gettext("User group membership").'")").next().andSelf().hide();';
+					if (array_key_exists("user_groups", $active_plugins) && getOption("groups"))  // "User group membership" information (if the "user_groups" plugin is enabled).
+						$user_config_add .= '$("tr.userextrainfo td:contains(\"User group membership\")").next().andSelf().hide();';
 						
 					
 				$user_config_add .= '
 				});
-				// ]]> -->
+			// ]]> -->
 			</script>';
 			
 			$user_config = $user_config.$user_config_add;
