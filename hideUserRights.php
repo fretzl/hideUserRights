@@ -75,11 +75,11 @@ class hideUserRights {
 			<script type="text/javascript">
 				// <!-- <![CDATA[
 					$(document).ready(function(){';
-						
-					if (getOption("all_rights")) {	// Rights. (the part with all the checkboxes).
-						$user_config_add .= '$(".box-rights").hide();';
+						// start with aligning everything on top of the <td>
 						$user_config_add .= '$(".box-rights").parent("td").css({"vertical-align":"top","padding-top":"20px"});';
-						}
+						
+					if (getOption("all_rights"))	// Rights. (the part with all the checkboxes).
+						$user_config_add .= '$(".box-rights").hide();';
 						
 					if (getOption("albums"))		// Managed albums
 						$user_config_add .= '$(".box-albums-unpadded:eq(0)").hide();';
