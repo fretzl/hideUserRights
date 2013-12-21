@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin to hide the display of user rights and other info if a user does NOT have ADMIN_RIGHTS.
+ * Plugin to hide the display of user rights and other info for users that do NOT have ADMIN_RIGHTS.
  * 
  * @author Fred Sondaar (fretzl)
  * @package plugins
