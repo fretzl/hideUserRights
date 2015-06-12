@@ -137,7 +137,7 @@ class hideUserRights {
 						$user_config_add .= '$("label[for=\'admin_language_0\'], ul.flags").hide();';
 
 					if (array_key_exists("userAddressFields", $active_plugins) && getOption("addressfields"))  // Address fields (if the "userAddressFields" plugin is enabled).
-						$user_config_add .= '$("td:contains(' . gettext("Street") . '), td:contains(' . gettext("City") . '), td:contains(' . gettext("State") . ')").parent("tr.userextrainfo").hide();';
+						$user_config_add .= '$("td:contains(' . gettext("Street") . ')").parent("tr.userextrainfo").hide().nextAll().slice(0, 2).hide();';
 
 					if (array_key_exists("quota_manager", $active_plugins) && getOption("quota"))  // Assigned quota (if the "quota_manager" plugin is enabled).
 						$user_config_add .= '$("td:contains(' . gettext("Image storage quota") . ')").parent("tr.userextrainfo").hide();';
