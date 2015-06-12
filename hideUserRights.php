@@ -63,23 +63,32 @@ class hideUserRights {
 										'type' => OPTION_TYPE_CHECKBOX,
 										'order'=> 5,
 										'desc' => gettext('Languages (Flags)')),
+						gettext('Address fields') => array(
+										'key' => 'addressfields',
+										'type' => OPTION_TYPE_CHECKBOX,
+										'order'=> 6,
+										'desc' => gettext('User address fields (only if the <code>userAddressFields</code> plugin is enabled)')),
 						gettext('Quota') => array(
 										'key' => 'quota',
 										'type' => OPTION_TYPE_CHECKBOX,
-										'order'=> 6,
+										'order'=> 7,
 										'desc' => gettext('Assigned quota (only if the <code>quota_manager</code> plugin is enabled)')),
 						gettext('Groups') => array(
 										'key' => 'groups',
 										'type' => OPTION_TYPE_CHECKBOX,
-										'order'=> 7,
+										'order'=> 8,
 										'desc' => gettext('User group membership information (only if the <code>user_groups</code> plugin is enabled).')),
 						gettext('All Noteboxes') => array(
 										'key' => 'notebox',
 										'type' => OPTION_TYPE_CHECKBOX,
-										'order'=> 8,
+										'order'=> 9,
 										'desc' => gettext('All Noteboxes'))
 		);
 		$active_plugins = getEnabledPlugins();
+		if (!array_key_exists("userAddressFields", $active_plugins)) {
+			$options[gettext('Address fields')]['disabled'] = true;
+				if (!isset($_POST['addressfields'])) setOption('addressfields', 0);
+			}
 		if (!array_key_exists("quota_manager", $active_plugins)) {
 			$options[gettext('Quota')]['disabled'] = true;
 				if (!isset($_POST['quota'])) setOption('quota', 0);
@@ -127,11 +136,14 @@ class hideUserRights {
 					if (getOption("languages"))		// Languages (Flags)
 						$user_config_add .= '$("label[for=\'admin_language_0\'], ul.flags").hide();';
 
+					if (array_key_exists("userAddressFields", $active_plugins) && getOption("addressfields"))  // Address fields (if the "userAddressFields" plugin is enabled).
+						$user_config_add .= '$("td:contains(' . gettext("Street") . '), td:contains(' . gettext("City") . '), td:contains(' . gettext("State") . ')").parent("tr.userextrainfo").hide();';
+
 					if (array_key_exists("quota_manager", $active_plugins) && getOption("quota"))  // Assigned quota (if the "quota_manager" plugin is enabled).
-						$user_config_add .= '$("td:contains(\"quota\")").parent("tr.userextrainfo").hide();';
+						$user_config_add .= '$("td:contains(' . gettext("Image storage quota") . ')").parent("tr.userextrainfo").hide();';
 
 					if (array_key_exists("user_groups", $active_plugins) && getOption("groups"))  // "User group membership" information (if the "user_groups" plugin is enabled).
-						$user_config_add .= '$("tr.userextrainfo td:contains(\"User group membership\")").next().andSelf().hide();';
+						$user_config_add .= '$("tr.userextrainfo td:contains(' . gettext("User group membership") . ')").next().andSelf().hide();';
 
 
 				$user_config_add .= '
