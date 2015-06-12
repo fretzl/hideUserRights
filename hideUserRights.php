@@ -137,13 +137,13 @@ class hideUserRights {
 						$user_config_add .= '$("label[for=\'admin_language_0\'], ul.flags").hide();';
 
 					if (array_key_exists("userAddressFields", $active_plugins) && getOption("addressfields"))  // Address fields (if the "userAddressFields" plugin is enabled).
-						$user_config_add .= '$("td:contains(' . gettext("Street") . ')").parent("tr.userextrainfo").hide().nextAll().slice(0, 2).hide();';
+						$user_config_add .= '$("tr.userextrainfo:contains(' . gettext("Street") . ')").nextAll().andSelf().slice(0, 3).hide();';
 
 					if (array_key_exists("quota_manager", $active_plugins) && getOption("quota"))  // Assigned quota (if the "quota_manager" plugin is enabled).
-						$user_config_add .= '$("td:contains(' . gettext("Image storage quota") . ')").parent("tr.userextrainfo").hide();';
+						$user_config_add .= '$("tr.userextrainfo:contains(' . gettext("Image storage quota") . ')").hide();';
 
 					if (array_key_exists("user_groups", $active_plugins) && getOption("groups"))  // "User group membership" information (if the "user_groups" plugin is enabled).
-						$user_config_add .= '$("tr.userextrainfo td:contains(' . gettext("User group membership") . ')").next().andSelf().hide();';
+						$user_config_add .= '$("tr.userextrainfo:contains(' . gettext("User group membership") . ')").hide();';
 
 
 				$user_config_add .= '
