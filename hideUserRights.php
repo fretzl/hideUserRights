@@ -11,12 +11,12 @@ $plugin_is_filter = 5|ADMIN_PLUGIN;
 $plugin_description = gettext_pl("Hide the display of user rights and other info if a user does NOT have ADMIN_RIGHTS.", "hideUserRights");
 $plugin_author = "Fred Sondaar (fretzl)";
 $plugin_category = gettext('Admin');
-$plugin_version = '1.1';
-$option_interface = 'hideUserRights';
+$plugin_version = '1.2';
+$option_interface = 'hideUserRightsOptions';
 
 zp_register_filter('admin_head', 'hideUserRights::customDisplayRights');
 
-class hideUserRights {
+class hideUserRightsOptions {
 
 	function __construct() {
 		setOptionDefault('all_rights', 0);
@@ -35,53 +35,38 @@ class hideUserRights {
 		$options =  array(	gettext('All rights') => array(
 										'key' => 'all_rights',
 										'type' => OPTION_TYPE_CHECKBOX,
-										'order'=> 1,
 										'desc' => gettext('Rights. (the part with all the checkboxes)')),
 						gettext('Albums') => array(
 										'key' => 'albums',
 										'type' => OPTION_TYPE_CHECKBOX,
-										'order'=> 2,
 										'desc' => gettext('Managed albums')),
 						gettext('Pages') => array(
 										'key' => 'pages',
 										'type' => OPTION_TYPE_CHECKBOX,
-										'order'=> 3,
 										'desc' => gettext('Managed pages')),
 						gettext('Categories') => array(
 										'key' => 'categories',
 										'type' => OPTION_TYPE_CHECKBOX,
-										'order'=> 4,
 										'desc' => gettext('Managed news categories')),
-						/*
-						gettext('Albums, Pages and Categories') => array(
-										'key' => 'albums_pages_cats',
-										'type' => OPTION_TYPE_CHECKBOX,
-										'desc' => gettext('Albums, Pages and Categories')),
-						*/
 						gettext('Languages (Flags)') => array(
 										'key' => 'languages',
 										'type' => OPTION_TYPE_CHECKBOX,
-										'order'=> 5,
 										'desc' => gettext('Languages (Flags)')),
 						gettext('Address fields') => array(
 										'key' => 'addressfields',
 										'type' => OPTION_TYPE_CHECKBOX,
-										'order'=> 6,
 										'desc' => gettext('User address fields (only if the <code>userAddressFields</code> plugin is enabled)')),
 						gettext('Quota') => array(
 										'key' => 'quota',
 										'type' => OPTION_TYPE_CHECKBOX,
-										'order'=> 7,
 										'desc' => gettext('Assigned quota (only if the <code>quota_manager</code> plugin is enabled)')),
 						gettext('Groups') => array(
 										'key' => 'groups',
 										'type' => OPTION_TYPE_CHECKBOX,
-										'order'=> 8,
 										'desc' => gettext('User group membership information (only if the <code>user_groups</code> plugin is enabled).')),
 						gettext('All Noteboxes') => array(
 										'key' => 'notebox',
 										'type' => OPTION_TYPE_CHECKBOX,
-										'order'=> 9,
 										'desc' => gettext('All Noteboxes'))
 		);
 		$active_plugins = getEnabledPlugins();
@@ -100,6 +85,9 @@ class hideUserRights {
 
 		return $options;
 	}
+}
+
+class hideUserRights {
 
 	static function customDisplayRights() {
 		global $_zp_admin_tab;
@@ -157,5 +145,4 @@ class hideUserRights {
 		}
 	}
 }
-
 ?>
