@@ -11,7 +11,7 @@ $plugin_is_filter = 5|ADMIN_PLUGIN;
 $plugin_description = gettext_pl("Hide the display of user rights and other info if a user does NOT have ADMIN_RIGHTS.", "hideUserRights");
 $plugin_author = "Fred Sondaar (fretzl)";
 $plugin_category = gettext('Admin');
-$plugin_version = '1.2';
+$plugin_version = '1.3';
 $option_interface = 'hideUserRightsOptions';
 
 zp_register_filter('admin_head', 'hideUserRights::customDisplayRights');
@@ -71,15 +71,15 @@ class hideUserRightsOptions {
 		);
 		$active_plugins = getEnabledPlugins();
 		if (!array_key_exists("userAddressFields", $active_plugins)) {
-			$options[gettext('Address fields')]['disabled'] = true;
+			$options['addressfields']['disabled'] = true;
 				if (!isset($_POST['addressfields'])) setOption('addressfields', 0);
 			}
 		if (!array_key_exists("quota_manager", $active_plugins)) {
-			$options[gettext('Quota')]['disabled'] = true;
+			$options['quota']['disabled'] = true;
 				if (!isset($_POST['quota'])) setOption('quota', 0);
 			}
 		if (!array_key_exists("user_groups", $active_plugins)) {
-			$options[gettext('Groups')]['disabled'] = true;
+			$options['groups']['disabled'] = true;
 				if (!isset($_POST['groups'])) setOption('groups', 0);
 			}
 
@@ -90,13 +90,13 @@ class hideUserRightsOptions {
 class hideUserRights {
 
 	static function customDisplayRights() {
-		global $_zp_admin_tab;
+		global $_zp_loggedin, $_zp_admin_current_page, $_zp_admin_tab;
 		$active_plugins = getEnabledPlugins();
-		if (!zp_loggedin(ADMIN_RIGHTS) && $_zp_admin_tab == 'users') {
-			$user_config_add = '';
-			$user_config = '
-			<script type="text/javascript">
-			// <!-- <![CDATA[
+		if ($_zp_loggedin) {
+			if (!zp_loggedin(ADMIN_RIGHTS) && $_zp_admin_current_page == 'users') {
+				$user_config_add = '';
+				$user_config = '
+				<script>
 					$(document).ready(function(){';
 						// start with aligning everything on top of the <td>
 						$user_config_add .= '$(".box-rights").parent("td").css({"vertical-align":"top","padding-top":"20px"});';
@@ -134,14 +134,14 @@ class hideUserRights {
 						$user_config_add .= '$("tr.userextrainfo:contains(' . gettext("User group membership") . ')").hide();';
 
 
-				$user_config_add .= '
-				});
-			// ]]> -->
-			</script>';
+					$user_config_add .= '
+					});
+				</script>';
 
-			$user_config = $user_config.$user_config_add;
+				$user_config = $user_config.$user_config_add;
 
-			echo $user_config;
+				echo $user_config;
+			}
 		}
 	}
 }
