@@ -8,79 +8,93 @@
  */
 
 $plugin_is_filter = 5|ADMIN_PLUGIN;
-$plugin_description = gettext_pl("Hide the display of user rights and other info if a user does NOT have ADMIN_RIGHTS.", "hideUserRights");
+$plugin_description = gettext_pl("Hide the display of user rights and other info for users that do NOT have ADMIN_RIGHTS", "hideUserRights");
 $plugin_author = "Fred Sondaar (fretzl)";
 $plugin_category = gettext('Admin');
 $plugin_version = '1.3';
 $option_interface = 'hideUserRightsOptions';
 
-zp_register_filter('admin_head', 'hideUserRights::customDisplayRights');
+zp_register_filter('admin_head', 'hideUserRights::customDisplayRights', 0);
 
 class hideUserRightsOptions {
 
 	function __construct() {
-		setOptionDefault('all_rights', 0);
-		setOptionDefault('albums', 0);
-		setOptionDefault('pages', 0);
-		setOptionDefault('categories', 0);
-		//setOptionDefault('albums_pages_news', 0);
-		setOptionDefault('notebox', 0);
-		setOptionDefault('languages', 0);
-		setOptionDefault('quota', 0);
-		setOptionDefault('groups', 0);
+		purgeOption('all_rights');
+		purgeOption('albums');
+		purgeOption('pages');
+		purgeOption('categories');
+		purgeOption('languages');
+		purgeOption('addressfields');
+		purgeOption('quota');
+		purgeOption('groups');
+		purgeOption('notebox');
+		setOptionDefault('hideuserrights-all_rights', 0);
+		setOptionDefault('hideuserrights-managedalbums', 0);
+		setOptionDefault('hideuserrights-managedpages', 0);
+		setOptionDefault('hideuserrights-managedcategories', 0);
+		setOptionDefault('hideuserrights-userinfo', 0);
+		setOptionDefault('hideuserrights-languages', 0);
+		setOptionDefault('hideuserrights-addressfields', 0);
+		setOptionDefault('hideuserrights-quota', 0);
+		setOptionDefault('hideuserrights-groups', 0);
+		setOptionDefault('hideuserrights-notebox', 0);
 	}
 
 	function getOptionsSupported() {
 
-		$options =  array(	gettext('All rights') => array(
-										'key' => 'all_rights',
+		$options =  array(	gettext_pl('All rights', 'hideUserRights') => array(
+										'key' => 'hideuserrights-all_rights',
 										'type' => OPTION_TYPE_CHECKBOX,
-										'desc' => gettext('Rights. (the part with all the checkboxes)')),
-						gettext('Albums') => array(
-										'key' => 'albums',
+										'desc' => gettext_pl('Rights (the part with all the checkboxes)', 'hideUserRights')),
+						gettext_pl('Managed albums', 'hideUserRights') => array(
+										'key' => 'hideuserrights-managedalbums',
 										'type' => OPTION_TYPE_CHECKBOX,
-										'desc' => gettext('Managed albums')),
-						gettext('Pages') => array(
-										'key' => 'pages',
+										'desc' => gettext_pl('Managed albums', 'hideUserRights')),
+						gettext_pl('Managed pages', 'hideUserRights') => array(
+										'key' => 'hideuserrights-managedpages',
 										'type' => OPTION_TYPE_CHECKBOX,
-										'desc' => gettext('Managed pages')),
-						gettext('Categories') => array(
-										'key' => 'categories',
+										'desc' => gettext_pl('Managed pages', 'hideUserRights')),
+						gettext_pl('Managed categories', 'hideUserRights') => array(
+										'key' => 'hideuserrights-managedcategories',
 										'type' => OPTION_TYPE_CHECKBOX,
-										'desc' => gettext('Managed news categories')),
-						gettext('Languages (Flags)') => array(
-										'key' => 'languages',
+										'desc' => gettext_pl('Managed news categories', 'hideUserRights')),
+						gettext_pl('Languages (Flags)', 'hideUserRights') => array(
+										'key' => 'hideuserrights-languages',
 										'type' => OPTION_TYPE_CHECKBOX,
-										'desc' => gettext('Languages (Flags)')),
-						gettext('Address fields') => array(
-										'key' => 'addressfields',
+										'desc' => gettext_pl('Languages (Flags)', 'hideUserRights')),
+						gettext_pl('User info', 'hideUserRights') => array(
+										'key' => 'hideuserrights-userinfo',
 										'type' => OPTION_TYPE_CHECKBOX,
-										'desc' => gettext('User address fields (only if the <code>userAddressFields</code> plugin is enabled)')),
-						gettext('Quota') => array(
-										'key' => 'quota',
+										'desc' => gettext_pl('User account info such as last login, etc.', 'hideUserRights')),
+						gettext_pl('Address fields', 'hideUserRights') => array(
+										'key' => 'hideuserrights-addressfields',
 										'type' => OPTION_TYPE_CHECKBOX,
-										'desc' => gettext('Assigned quota (only if the <code>quota_manager</code> plugin is enabled)')),
-						gettext('Groups') => array(
-										'key' => 'groups',
+										'desc' => gettext_pl('User address fields (only if the <code>userAddressFields</code> plugin is enabled)', 'hideUserRights')),
+						gettext_pl('Quota', 'hideUserRights') => array(
+										'key' => 'hideuserrights-quota',
 										'type' => OPTION_TYPE_CHECKBOX,
-										'desc' => gettext('User group membership information (only if the <code>user_groups</code> plugin is enabled).')),
-						gettext('All Noteboxes') => array(
-										'key' => 'notebox',
+										'desc' => gettext_pl('Assigned quota (only if the <code>quota_manager</code> plugin is enabled)', 'hideUserRights')),
+						gettext_pl('Group membership', 'hideUserRights') => array(
+										'key' => 'hideuserrights-groups',
 										'type' => OPTION_TYPE_CHECKBOX,
-										'desc' => gettext('All Noteboxes'))
+										'desc' => gettext_pl('User group membership information (only if the <code>user_groups</code> plugin is enabled).', 'hideUserRights')),
+						gettext_pl('Noteboxes', 'hideUserRights') => array(
+										'key' => 'hideuserrights-notebox',
+										'type' => OPTION_TYPE_CHECKBOX,
+										'desc' => gettext_pl('All Noteboxes', 'hideUserRights'))
 		);
 		$active_plugins = getEnabledPlugins();
 		if (!array_key_exists("userAddressFields", $active_plugins)) {
-			$options['addressfields']['disabled'] = true;
-				if (!isset($_POST['addressfields'])) setOption('addressfields', 0);
+			$options['hideuserrights-addressfields']['disabled'] = true;
+				if (!isset($_POST['hideuserrights-addressfields'])) setOption('hideuserrights-addressfields', 0);
 			}
 		if (!array_key_exists("quota_manager", $active_plugins)) {
-			$options['quota']['disabled'] = true;
-				if (!isset($_POST['quota'])) setOption('quota', 0);
+			$options['hideuserrights-quota']['disabled'] = true;
+				if (!isset($_POST['hideuserrights-quota'])) setOption('hideuserrights-quota', 0);
 			}
 		if (!array_key_exists("user_groups", $active_plugins)) {
-			$options['groups']['disabled'] = true;
-				if (!isset($_POST['groups'])) setOption('groups', 0);
+			$options['hideuserrights-groups']['disabled'] = true;
+				if (!isset($_POST['hideuserrights-groups'])) setOption('hideuserrights-groups', 0);
 			}
 
 		return $options;
@@ -97,42 +111,72 @@ class hideUserRights {
 				$user_config_add = '';
 				$user_config = '
 				<script>
-					$(document).ready(function(){';
-						// start with aligning everything on top of the <td>
-						$user_config_add .= '$(".box-rights").parent("td").css({"vertical-align":"top","padding-top":"20px"});';
+					document.addEventListener("DOMContentLoaded", function() {' . "\n";
+					
+					// start with aligning everything on top of the <td>
+					$user_config_add .= 'document.querySelector(".box-rights").parentElement.style.cssText += "vertical-align: top; padding-top: 20px;";' . "\n";
 
-					if (getOption("all_rights"))	// Rights. (the part with all the checkboxes).
-						$user_config_add .= '$(".box-rights").hide();';
+					// Rights. (the part with all the checkboxes)
+					if (getOption("hideuserrights-all_rights")) {
+						$user_config_add .= 'document.querySelector(".box-rights").remove();' . "\n";
+					}
+					
+					// Managed albums
+					if (getOption("hideuserrights-managedalbums")) {
+						$user_config_add .= 'const albumsbox = Array.prototype.slice.call(document.querySelectorAll("div.box-albums-unpadded")).filter(function (el) { return el.textContent.includes("Managed albums")})[0];' . "\n";
+						$user_config_add .= 'albumsbox.remove();' . "\n";
+					}
+					
+					// Managed pages
+					if (getOption("hideuserrights-managedpages")) {
+						$user_config_add .= 'const pagesbox = Array.prototype.slice.call(document.querySelectorAll("div.box-albums-unpadded")).filter(function (el) { return el.textContent.includes("Managed pages")})[0];' . "\n";
+						$user_config_add .= 'pagesbox.remove();' . "\n";
+					}
+					
+					// Managed news categories
+					if (getOption("hideuserrights-managedcategories")) {
+						$user_config_add .= 'const catsbox = Array.prototype.slice.call(document.querySelectorAll("div.box-albums-unpadded")).filter(function (el) { return el.textContent.includes("Managed news categories")})[0];' . "\n";
+						$user_config_add .= 'catsbox.remove();' . "\n";
+					}
+					
+					// Languages (Flags)
+					if (getOption("hideuserrights-languages"))	{
+						$user_config_add .= 'document.querySelector("label[for=\"admin_language_0\"]").remove();' . "\n";
+						$user_config_add .= 'document.querySelector("ul.flags").remove();' . "\n";
+					}
+					
+					// User info
+					if (getOption("hideuserrights-userinfo"))	{
+						$user_config_add .= 'document.querySelector("tr.userextrainfo td ul:not(.flags)").style.display = "none";' . "\n";
+					}
+					
+					// Address fields (if the "userAddressFields" plugin is enabled)
+					if (array_key_exists("userAddressFields", $active_plugins) && getOption("hideuserrights-addressfields"))  {
+						$user_config_add .= 'const addressfield = Array.prototype.slice.call(document.querySelectorAll("tr.userextrainfo td:first-child fieldset")).filter(function (el) { return el.textContent.includes("Street")})[0];' . "\n";
+						$user_config_add .= 'const addressrow = addressfield.closest("tr");' . "\n";
+						$user_config_add .= 'addressrow.nextElementSibling.remove();' . "\n";// First sibling
+						$user_config_add .= 'addressrow.nextElementSibling.remove();' . "\n";// Second sibling which actually has become the first sibling since the first sibling has just been removed...
+						$user_config_add .= 'addressrow.remove();' . "\n";//Selected element itself
+					}
+					
+					// Groups and quota
+					$user_config_add .= 'const elements = document.querySelectorAll("tr.userextrainfo td:first-child");' . "\n";
 
-					if (getOption("albums"))		// Managed albums
-						$user_config_add .= '$(".box-albums-unpadded:eq(0)").hide();';
-
-					if (getOption("pages"))			// Managed pages
-						$user_config_add .= '$(".box-albums-unpadded:eq(1)").hide();';
-
-					if (getOption("categories"))	// Managed news categories
-						$user_config_add .= '$(".box-albums-unpadded:eq(2)").hide();';
-
-					/*
-					if (getOption("albums_pages_cats"))	// Albums, Pages, and Categories.
-						$user_config_add .= '$(".box-albums-unpadded").remove();';
-					*/
-
-					if (getOption("notebox"))		// All Noteboxes
-						$user_config_add .= '$(".notebox").hide();';
-
-					if (getOption("languages"))		// Languages (Flags)
-						$user_config_add .= '$("label[for=\'admin_language_0\'], ul.flags").hide();';
-
-					if (array_key_exists("userAddressFields", $active_plugins) && getOption("addressfields"))  // Address fields (if the "userAddressFields" plugin is enabled).
-						$user_config_add .= '$("tr.userextrainfo:contains(' . gettext("Street") . ')").nextAll().andSelf().slice(0, 3).hide();';
-
-					if (array_key_exists("quota_manager", $active_plugins) && getOption("quota"))  // Assigned quota (if the "quota_manager" plugin is enabled).
-						$user_config_add .= '$("tr.userextrainfo:contains(' . gettext("Image storage quota") . ')").hide();';
-
-					if (array_key_exists("user_groups", $active_plugins) && getOption("groups"))  // "User group membership" information (if the "user_groups" plugin is enabled).
-						$user_config_add .= '$("tr.userextrainfo:contains(' . gettext("User group membership") . ')").hide();';
-
+					// "User group membership" information (if the "user_groups" plugin is enabled)
+					if (array_key_exists("user_groups", $active_plugins) && getOption("hideuserrights-groups")) {
+						$user_config_add .= 'for (el of elements) {if (el.textContent.indexOf("User") == 1) {el.parentElement.remove()}};' . "\n";
+					}
+					
+					// Assigned quota (if the "quota_manager" plugin is enabled and user has "Upload" rights)
+					if (array_key_exists("quota_manager", $active_plugins) && getOption("hideuserrights-quota")) {
+						$user_config_add .= 'for (el of elements) {if (el.textContent.indexOf("Image") == 0) {el.parentElement.remove()}};' . "\n";
+					}
+					
+					// All Noteboxes
+					if (getOption("hideuserrights-notebox")) {
+						$user_config_add .= 'const allnotes = document.getElementsByClassName("notebox");' . "\n";
+						$user_config_add .= 'if (allnotes.length > 0) { while (allnotes[0]) { allnotes[0].remove(); } }' . "\n";
+					}
 
 					$user_config_add .= '
 					});
