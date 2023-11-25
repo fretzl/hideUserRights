@@ -1,0 +1,104 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.4\n"
+"POT-Creation-Date: 2023-11-25 19:15+0100\n"
+"PO-Revision-Date: 2023-11-25 19:16+0100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.4.1\n"
+"X-Poedit-Basepath: ../../..\n"
+"X-Poedit-KeywordsList: ;gettext_pl\n"
+"X-Poedit-SearchPath-0: hideUserRights.php\n"
+
+#: hideUserRights.php:11
+msgid ""
+"Hide the display of user rights and other info for users that do NOT have "
+"ADMIN_RIGHTS"
+msgstr ""
+"Verberg de rechten van gebruikers die ze niet hebben wanneer ze geen "
+"administrator-rechten hebben"
+
+#: hideUserRights.php:45
+msgid "All rights"
+msgstr "Alle rechten"
+
+#: hideUserRights.php:48
+msgid "Rights (the part with all the checkboxes)"
+msgstr "Rechten (het gedeelte met alle checkboxen)"
+
+#: hideUserRights.php:49 hideUserRights.php:52
+msgid "Managed albums"
+msgstr "Beheerde albums"
+
+#: hideUserRights.php:53 hideUserRights.php:56
+msgid "Managed pages"
+msgstr "Beheerde pagina’s"
+
+#: hideUserRights.php:57
+msgid "Managed categories"
+msgstr "Beheerde categoriën"
+
+#: hideUserRights.php:60
+msgid "Managed news categories"
+msgstr "Beheerde nieuwscategorieën"
+
+#: hideUserRights.php:61 hideUserRights.php:64
+msgid "Languages (Flags)"
+msgstr "Talen (vlaggen)"
+
+#: hideUserRights.php:65
+msgid "User info"
+msgstr "Gebruikersinformatie"
+
+#: hideUserRights.php:68
+msgid "User account info such as last login, etc."
+msgstr ""
+"Informatie over het gebruikersaccount zoals b.v. de laatste login, enz."
+
+#: hideUserRights.php:69
+msgid "Address fields"
+msgstr "Adresvelden"
+
+#: hideUserRights.php:72
+msgid ""
+"User address fields (only if the <code>userAddressFields</code> plugin is "
+"enabled)"
+msgstr ""
+"Gebruiker adresvelden (alleen wanneer de <code>userAddressFields</code> is "
+"geactiveerd)"
+
+#: hideUserRights.php:73
+msgid "Quota"
+msgstr "Quota"
+
+#: hideUserRights.php:76
+msgid ""
+"Assigned quota (only if the <code>quota_manager</code> plugin is enabled)"
+msgstr ""
+"Quota voor uploads (alleen wanneer de <code>quota_manager</code> is "
+"geactiveerd)"
+
+#: hideUserRights.php:77
+msgid "Group membership"
+msgstr "Toegewezen groep"
+
+#: hideUserRights.php:80
+msgid ""
+"User group membership information (only if the <code>user_groups</code> "
+"plugin is enabled)."
+msgstr ""
+"Gebruikersgroepen info (alleen wanneer de <code>user_groups</code> is "
+"geactiveerd)"
+
+#: hideUserRights.php:81
+msgid "Noteboxes"
+msgstr "Opmerkingen en waarschuwingen"
+
+#: hideUserRights.php:84
+msgid "All Noteboxes"
+msgstr "Alle opmerkingen en waarschuwingen"
