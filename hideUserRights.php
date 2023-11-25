@@ -14,7 +14,7 @@ $plugin_category = gettext('Admin');
 $plugin_version = '1.3';
 $option_interface = 'hideUserRightsOptions';
 
-zp_register_filter('admin_head', 'hideUserRights::customDisplayRights', 0);
+zp_register_filter('admin_head', 'hideUserRights::customDisplayRights', 999);
 
 class hideUserRightsOptions {
 
@@ -108,81 +108,79 @@ class hideUserRights {
 		$active_plugins = getEnabledPlugins();
 		if ($_zp_loggedin) {
 			if (!zp_loggedin(ADMIN_RIGHTS) && $_zp_admin_current_page == 'users') {
-				$user_config_add = '';
 				$user_config = '
 				<script>
 					document.addEventListener("DOMContentLoaded", function() {' . "\n";
 					
 					// start with aligning everything on top of the <td>
-					$user_config_add .= 'document.querySelector(".box-rights").parentElement.style.cssText += "vertical-align: top; padding-top: 20px;";' . "\n";
+					$user_config .= 'document.querySelector(".box-rights").parentElement.style.cssText += "vertical-align: top; padding-top: 20px;";' . "\n";
 
 					// Rights. (the part with all the checkboxes)
 					if (getOption("hideuserrights-all_rights")) {
-						$user_config_add .= 'document.querySelector(".box-rights").remove();' . "\n";
+						$user_config .= 'document.querySelector(".box-rights").remove();' . "\n";
 					}
 					
 					// Managed albums
 					if (getOption("hideuserrights-managedalbums")) {
-						$user_config_add .= 'const albumsbox = Array.prototype.slice.call(document.querySelectorAll("div.box-albums-unpadded")).filter(function (el) { return el.textContent.includes("Managed albums")})[0];' . "\n";
-						$user_config_add .= 'albumsbox.remove();' . "\n";
+						$user_config .= 'const albumsbox = Array.prototype.slice.call(document.querySelectorAll("div.box-albums-unpadded")).filter(function (el) { return el.textContent.includes("Managed albums")})[0];' . "\n";
+						$user_config .= 'albumsbox.remove();' . "\n";
+						
 					}
 					
 					// Managed pages
 					if (getOption("hideuserrights-managedpages")) {
-						$user_config_add .= 'const pagesbox = Array.prototype.slice.call(document.querySelectorAll("div.box-albums-unpadded")).filter(function (el) { return el.textContent.includes("Managed pages")})[0];' . "\n";
-						$user_config_add .= 'pagesbox.remove();' . "\n";
+						$user_config .= 'const pagesbox = Array.prototype.slice.call(document.querySelectorAll("div.box-albums-unpadded")).filter(function (el) { return el.textContent.includes("Managed pages")})[0];' . "\n";
+						$user_config .= 'pagesbox.remove();' . "\n";
 					}
 					
 					// Managed news categories
 					if (getOption("hideuserrights-managedcategories")) {
-						$user_config_add .= 'const catsbox = Array.prototype.slice.call(document.querySelectorAll("div.box-albums-unpadded")).filter(function (el) { return el.textContent.includes("Managed news categories")})[0];' . "\n";
-						$user_config_add .= 'catsbox.remove();' . "\n";
+						$user_config .= 'const catsbox = Array.prototype.slice.call(document.querySelectorAll("div.box-albums-unpadded")).filter(function (el) { return el.textContent.includes("Managed news categories")})[0];' . "\n";
+						$user_config .= 'catsbox.remove();' . "\n";
 					}
 					
 					// Languages (Flags)
 					if (getOption("hideuserrights-languages"))	{
-						$user_config_add .= 'document.querySelector("label[for=\"admin_language_0\"]").remove();' . "\n";
-						$user_config_add .= 'document.querySelector("ul.flags").remove();' . "\n";
+						$user_config .= 'document.querySelector("label[for=\"admin_language_0\"]").remove();' . "\n";
+						$user_config .= 'document.querySelector("ul.flags").remove();' . "\n";
 					}
 					
 					// User info
 					if (getOption("hideuserrights-userinfo"))	{
-						$user_config_add .= 'document.querySelector("tr.userextrainfo td ul:not(.flags)").style.display = "none";' . "\n";
+						$user_config .= 'document.querySelector("tr.userextrainfo td ul:not(.flags)").style.display = "none";' . "\n";
 					}
 					
 					// Address fields (if the "userAddressFields" plugin is enabled)
 					if (array_key_exists("userAddressFields", $active_plugins) && getOption("hideuserrights-addressfields"))  {
-						$user_config_add .= 'const addressfield = Array.prototype.slice.call(document.querySelectorAll("tr.userextrainfo td:first-child fieldset")).filter(function (el) { return el.textContent.includes("Street")})[0];' . "\n";
-						$user_config_add .= 'const addressrow = addressfield.closest("tr");' . "\n";
-						$user_config_add .= 'addressrow.nextElementSibling.remove();' . "\n";// First sibling
-						$user_config_add .= 'addressrow.nextElementSibling.remove();' . "\n";// Second sibling which actually has become the first sibling since the first sibling has just been removed...
-						$user_config_add .= 'addressrow.remove();' . "\n";//Selected element itself
+						$user_config .= 'const addressfield = Array.prototype.slice.call(document.querySelectorAll("tr.userextrainfo td:first-child fieldset")).filter(function (el) { return el.textContent.includes("Street")})[0];' . "\n";
+						$user_config .= 'const addressrow = addressfield.closest("tr");' . "\n";
+						$user_config .= 'addressrow.nextElementSibling.remove();' . "\n";// First sibling
+						$user_config .= 'addressrow.nextElementSibling.remove();' . "\n";// Second sibling which actually has become the first sibling since the first sibling has just been removed...
+						$user_config .= 'addressrow.remove();' . "\n";//Selected element itself
 					}
 					
 					// Groups and quota
-					$user_config_add .= 'const elements = document.querySelectorAll("tr.userextrainfo td:first-child");' . "\n";
+					$user_config .= 'const elements = document.querySelectorAll("tr.userextrainfo td:first-child");' . "\n";
 
 					// "User group membership" information (if the "user_groups" plugin is enabled)
 					if (array_key_exists("user_groups", $active_plugins) && getOption("hideuserrights-groups")) {
-						$user_config_add .= 'for (el of elements) {if (el.textContent.indexOf("User") == 1) {el.parentElement.remove()}};' . "\n";
+						$user_config .= 'for (el of elements) {if (el.textContent.indexOf("User") == 1) {el.parentElement.remove()}};' . "\n";
 					}
 					
 					// Assigned quota (if the "quota_manager" plugin is enabled and user has "Upload" rights)
 					if (array_key_exists("quota_manager", $active_plugins) && getOption("hideuserrights-quota")) {
-						$user_config_add .= 'for (el of elements) {if (el.textContent.indexOf("Image") == 0) {el.parentElement.remove()}};' . "\n";
+						$user_config .= 'for (el of elements) {if (el.textContent.indexOf("Image") == 0) {el.parentElement.remove()}};' . "\n";
 					}
 					
 					// All Noteboxes
 					if (getOption("hideuserrights-notebox")) {
-						$user_config_add .= 'const allnotes = document.getElementsByClassName("notebox");' . "\n";
-						$user_config_add .= 'if (allnotes.length > 0) { while (allnotes[0]) { allnotes[0].remove(); } }' . "\n";
+						$user_config .= 'const allnotes = document.getElementsByClassName("notebox");' . "\n";
+						$user_config .= 'if (allnotes.length > 0) { while (allnotes[0]) { allnotes[0].remove(); } }' . "\n";
 					}
 
-					$user_config_add .= '
+					$user_config .= '
 					});
 				</script>';
-
-				$user_config = $user_config.$user_config_add;
 
 				echo $user_config;
 			}
