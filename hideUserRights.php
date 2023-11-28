@@ -11,7 +11,7 @@ $plugin_is_filter = 5|ADMIN_PLUGIN;
 $plugin_description = gettext_pl("Hide the display of user rights and other info for users that do NOT have ADMIN_RIGHTS", "hideUserRights");
 $plugin_author = "Fred Sondaar (fretzl)";
 $plugin_category = gettext('Admin');
-$plugin_version = '1.4';
+$plugin_version = '1.6';
 $option_interface = 'hideUserRightsOptions';
 
 zp_register_filter('admin_head', 'hideUserRights::customDisplayRights', 999);
