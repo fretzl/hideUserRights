@@ -8,13 +8,13 @@
  */
 
 $plugin_is_filter = 5|ADMIN_PLUGIN;
-$plugin_description = gettext_pl("Hide the display of user rights and other info for users that do NOT have ADMIN_RIGHTS", "hideUserRights");
+$plugin_description = i18n::gettext_pl("Hide the display of user rights and other info for users that do NOT have ADMIN_RIGHTS", "hideUserRights");
 $plugin_author = "Fred Sondaar (fretzl)";
 $plugin_category = gettext('Admin');
 $plugin_version = '1.6';
 $option_interface = 'hideUserRightsOptions';
 
-zp_register_filter('admin_head', 'hideUserRights::customDisplayRights', 999);
+filter::registerFilter('admin_head', 'hideUserRights::customDisplayRights', 999);
 
 class hideUserRightsOptions {
 
@@ -42,46 +42,46 @@ class hideUserRightsOptions {
 
 	function getOptionsSupported() {
 
-		$options =  array(	gettext_pl('All rights', 'hideUserRights') => array(
+		$options =  array(	i18n::gettext_pl('All rights', 'hideUserRights') => array(
 										'key' => 'hideuserrights-all_rights',
 										'type' => OPTION_TYPE_CHECKBOX,
-										'desc' => gettext_pl('Rights (the part with all the checkboxes)', 'hideUserRights')),
-						gettext_pl('Managed albums', 'hideUserRights') => array(
+										'desc' => i18n::gettext_pl('Rights (the part with all the checkboxes)', 'hideUserRights')),
+						i18n::gettext_pl('Managed albums', 'hideUserRights') => array(
 										'key' => 'hideuserrights-managedalbums',
 										'type' => OPTION_TYPE_CHECKBOX,
-										'desc' => gettext_pl('Managed albums', 'hideUserRights')),
-						gettext_pl('Managed pages', 'hideUserRights') => array(
+										'desc' => i18n::gettext_pl('Managed albums', 'hideUserRights')),
+						i18n::gettext_pl('Managed pages', 'hideUserRights') => array(
 										'key' => 'hideuserrights-managedpages',
 										'type' => OPTION_TYPE_CHECKBOX,
-										'desc' => gettext_pl('Managed pages', 'hideUserRights')),
-						gettext_pl('Managed categories', 'hideUserRights') => array(
+										'desc' => i18n::gettext_pl('Managed pages', 'hideUserRights')),
+						i18n::gettext_pl('Managed categories', 'hideUserRights') => array(
 										'key' => 'hideuserrights-managedcategories',
 										'type' => OPTION_TYPE_CHECKBOX,
-										'desc' => gettext_pl('Managed news categories', 'hideUserRights')),
-						gettext_pl('Languages (Flags)', 'hideUserRights') => array(
+										'desc' => i18n::gettext_pl('Managed news categories', 'hideUserRights')),
+						i18n::gettext_pl('Languages (Flags)', 'hideUserRights') => array(
 										'key' => 'hideuserrights-languages',
 										'type' => OPTION_TYPE_CHECKBOX,
-										'desc' => gettext_pl('Languages (Flags)', 'hideUserRights')),
-						gettext_pl('User info', 'hideUserRights') => array(
+										'desc' => i18n::gettext_pl('Languages (Flags)', 'hideUserRights')),
+						i18n::gettext_pl('User info', 'hideUserRights') => array(
 										'key' => 'hideuserrights-userinfo',
 										'type' => OPTION_TYPE_CHECKBOX,
-										'desc' => gettext_pl('User account info such as last login, etc.', 'hideUserRights')),
-						gettext_pl('Address fields', 'hideUserRights') => array(
+										'desc' => i18n::gettext_pl('User account info such as last login, etc.', 'hideUserRights')),
+						i18n::gettext_pl('Address fields', 'hideUserRights') => array(
 										'key' => 'hideuserrights-addressfields',
 										'type' => OPTION_TYPE_CHECKBOX,
-										'desc' => gettext_pl('User address fields (only if the <code>userAddressFields</code> plugin is enabled)', 'hideUserRights')),
-						gettext_pl('Quota', 'hideUserRights') => array(
+										'desc' => i18n::gettext_pl('User address fields (only if the <code>userAddressFields</code> plugin is enabled)', 'hideUserRights')),
+						i18n::gettext_pl('Quota', 'hideUserRights') => array(
 										'key' => 'hideuserrights-quota',
 										'type' => OPTION_TYPE_CHECKBOX,
-										'desc' => gettext_pl('Assigned quota (only if the <code>quota_manager</code> plugin is enabled)', 'hideUserRights')),
-						gettext_pl('Group membership', 'hideUserRights') => array(
+										'desc' => i18n::gettext_pl('Assigned quota (only if the <code>quota_manager</code> plugin is enabled)', 'hideUserRights')),
+						i18n::gettext_pl('Group membership', 'hideUserRights') => array(
 										'key' => 'hideuserrights-groups',
 										'type' => OPTION_TYPE_CHECKBOX,
-										'desc' => gettext_pl('User group membership information (only if the <code>user_groups</code> plugin is enabled).', 'hideUserRights')),
-						gettext_pl('Noteboxes', 'hideUserRights') => array(
+										'desc' => i18n::gettext_pl('User group membership information (only if the <code>user_groups</code> plugin is enabled).', 'hideUserRights')),
+						i18n::gettext_pl('Noteboxes', 'hideUserRights') => array(
 										'key' => 'hideuserrights-notebox',
 										'type' => OPTION_TYPE_CHECKBOX,
-										'desc' => gettext_pl('All Noteboxes', 'hideUserRights'))
+										'desc' => i18n::gettext_pl('All Noteboxes', 'hideUserRights'))
 		);
 		$active_plugins = getEnabledPlugins();
 		if (!array_key_exists("userAddressFields", $active_plugins)) {
